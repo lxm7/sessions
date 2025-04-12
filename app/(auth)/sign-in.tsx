@@ -69,7 +69,7 @@ export default function SignInScreen() {
                   errors.email ? 'border-red-500' : 'border-gray-400'
                 }`}
                 placeholder="example@gmail.com"
-                placeholderTextColor="#D1D5DB"
+                placeholderTextColor="#B2B7C2"
                 keyboardType="email-address"
                 autoCapitalize="none"
                 value={value}
@@ -96,7 +96,7 @@ export default function SignInScreen() {
                     errors.password ? 'border-red-500' : 'border-gray-400'
                   }`}
                   placeholder="Enter your password"
-                  placeholderTextColor="#D1D5DB"
+                  placeholderTextColor="#B2B7C2"
                   secureTextEntry={!showPassword}
                   value={value}
                   onChangeText={onChange}

@@ -77,7 +77,7 @@ export default function ForgotPasswordScreen() {
               error ? 'border-red-500' : 'border-gray-400'
             }`}
             placeholder="example@gmail.com"
-            placeholderTextColor="#D1D5DB"
+            placeholderTextColor="#B2B7C2"
             keyboardType="email-address"
             autoCapitalize="none"
             value={email}

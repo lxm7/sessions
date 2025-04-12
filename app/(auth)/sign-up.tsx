@@ -116,7 +116,7 @@ export default function CreateAccountScreen() {
               errors.name ? 'border-red-500' : 'border-gray-400'
             }`}
             placeholder="John Doe"
-            placeholderTextColor="#D1D5DB"
+            placeholderTextColor="#B2B7C2"
             value={name}
             onChangeText={(text) => {
               setName(text);
@@ -139,7 +139,7 @@ export default function CreateAccountScreen() {
               errors.email ? 'border-red-500' : 'border-gray-400'
             }`}
             placeholder="example@gmail.com"
-            placeholderTextColor="#D1D5DB"
+            placeholderTextColor="#B2B7C2"
             keyboardType="email-address"
             autoCapitalize="none"
             value={email}
@@ -165,7 +165,7 @@ export default function CreateAccountScreen() {
                 errors.password ? 'border-red-500' : 'border-gray-400'
               }`}
               placeholder="••••••••••••••"
-              placeholderTextColor="#D1D5DB"
+              placeholderTextColor="#B2B7C2"
               secureTextEntry={!showPassword}
               value={password}
               onChangeText={(text) => {
