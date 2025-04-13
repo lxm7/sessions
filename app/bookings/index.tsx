@@ -97,7 +97,7 @@ const BookingCard = ({ booking, onRemindMeChange }: BookingCardProps) => (
         <TouchableOpacity className="mr-2 flex-1 items-center rounded-full bg-blue-100 py-3">
           <Text className="font-semibold text-blue-500">Cancel</Text>
         </TouchableOpacity>
-        <TouchableOpacity className="ml-2 flex-1 items-center rounded-full bg-blue-500 py-3">
+        <TouchableOpacity className="ml-2 flex-1 items-center rounded-full bg-gradient-to-r from-purple-500 to-purple-900 py-3">
           <Text className="font-semibold text-white">Reschedule</Text>
         </TouchableOpacity>
       </View>

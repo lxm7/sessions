@@ -56,7 +56,7 @@ const BottomNavBar = ({ active }: BottomNavBarProps) => {
               />
               {/* Indicator dot for Chat */}
               {isActive && item.name === 'Chat' && (
-                <View className="absolute -right-0.5 -top-0.5 h-1.5 w-1.5 rounded-full bg-blue-500" />
+                <View className="absolute -right-0.5 -top-0.5 h-1.5 w-1.5 rounded-full bg-gradient-to-r from-purple-500 to-purple-900" />
               )}
             </View>
             <Text className={`text-xs ${isActive ? 'font-medium text-blue-500' : 'text-gray-500'}`}>

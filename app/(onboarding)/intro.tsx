@@ -36,7 +36,7 @@ const OnboardingScreen = () => {
 
       <View className="mb-4 flex-row items-center justify-between p-6">
         <Pressable className="rounded-full border border-blue-500 p-3">
-          <Ionicons name="arrow-back" size={24} color="#3b82f6" />
+          <Ionicons name="arrow-back" size={24} color="#a855f7" />
         </Pressable>
 
         <View className="flex-row">
@@ -44,13 +44,15 @@ const OnboardingScreen = () => {
             <View
               key={index}
               className={`mx-1 h-2 w-2 rounded-full ${
-                index === activeDot ? 'bg-blue-500' : 'bg-gray-300'
+                index === activeDot
+                  ? 'bg-gradient-to-r from-purple-500 to-purple-900'
+                  : 'bg-gray-300'
               }`}
             />
           ))}
         </View>
 
-        <Pressable className="rounded-full bg-blue-500 p-3">
+        <Pressable className="rounded-full bg-gradient-to-r from-purple-500 to-purple-900 p-3">
           <Ionicons name="arrow-forward" size={24} color="white" />
         </Pressable>
       </View>

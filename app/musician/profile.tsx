@@ -56,7 +56,7 @@ export default function musicianDetailsScreen() {
           <View className="ml-4 flex-1">
             <View className="flex-row items-center">
               <Text className="text-xl font-bold text-gray-800">Jonny Wilson</Text>
-              <View className="ml-2 h-6 w-6 items-center justify-center rounded-full bg-blue-500">
+              <View className="ml-2 h-6 w-6 items-center justify-center rounded-full bg-gradient-to-r from-purple-500 to-purple-900">
                 <Feather name="check" size={14} color="white" />
               </View>
             </View>
@@ -64,10 +64,10 @@ export default function musicianDetailsScreen() {
             <Text className="mt-1 text-gray-500">Guitarist</Text>
 
             <View className="mt-2 flex-row items-center">
-              <Ionicons name="location-outline" size={16} color="#007AFF" />
+              <Ionicons name="location-outline" size={16} color="#a855f7" />
               <Text className="ml-1 text-gray-600">New York, United States</Text>
               <Pressable className="ml-2" onPress={() => router.push('/map')}>
-                <Ionicons name="map-outline" size={16} color="#007AFF" />
+                <Ionicons name="map-outline" size={16} color="#a855f7" />
               </Pressable>
             </View>
           </View>
@@ -78,7 +78,7 @@ export default function musicianDetailsScreen() {
       <View className="flex-row justify-between border-b border-gray-100 px-4 py-5">
         <View className="items-center">
           <View className="mb-1 h-12 w-12 items-center justify-center rounded-full bg-blue-100">
-            <Ionicons name="people-outline" size={20} color="#007AFF" />
+            <Ionicons name="people-outline" size={20} color="#a855f7" />
           </View>
           <Text className="text-lg font-bold text-gray-800">7,500+</Text>
           <Text className="text-sm text-gray-500">Patients</Text>
@@ -86,7 +86,7 @@ export default function musicianDetailsScreen() {
 
         <View className="items-center">
           <View className="mb-1 h-12 w-12 items-center justify-center rounded-full bg-blue-100">
-            <Ionicons name="briefcase-outline" size={20} color="#007AFF" />
+            <Ionicons name="briefcase-outline" size={20} color="#a855f7" />
           </View>
           <Text className="text-lg font-bold text-gray-800">10+</Text>
           <Text className="text-sm text-gray-500">Years Exp.</Text>
@@ -94,7 +94,7 @@ export default function musicianDetailsScreen() {
 
         <View className="items-center">
           <View className="mb-1 h-12 w-12 items-center justify-center rounded-full bg-blue-100">
-            <Ionicons name="star-outline" size={20} color="#007AFF" />
+            <Ionicons name="star-outline" size={20} color="#a855f7" />
           </View>
           <Text className="text-lg font-bold text-gray-800">4.9+</Text>
           <Text className="text-sm text-gray-500">Rating</Text>
@@ -102,7 +102,7 @@ export default function musicianDetailsScreen() {
 
         <View className="items-center">
           <View className="mb-1 h-12 w-12 items-center justify-center rounded-full bg-blue-100">
-            <Ionicons name="chatbubble-outline" size={20} color="#007AFF" />
+            <Ionicons name="chatbubble-outline" size={20} color="#a855f7" />
           </View>
           <Text className="text-lg font-bold text-gray-800">4,956</Text>
           <Text className="text-sm text-gray-500">Review</Text>
@@ -137,7 +137,7 @@ export default function musicianDetailsScreen() {
       {/* Book Appointment Button */}
       <View className="p-4 pb-8">
         <Pressable
-          className="h-14 items-center justify-center rounded-full bg-blue-500"
+          className="h-14 items-center justify-center rounded-full bg-gradient-to-r from-purple-500 to-purple-900"
           onPress={() => router.push(`/book/${id}`)}>
           <Text className="text-lg font-bold text-white">Book Appointment</Text>
         </Pressable>

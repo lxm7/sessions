@@ -1,0 +1,38 @@
+export const musicians = [
+  {
+    id: '1',
+    name: 'Jane Cooper',
+    instruments: 'Guitarist',
+    image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4',
+    rating: 4.8,
+    previousShows: 49,
+    isFavorite: true,
+  },
+  {
+    id: '2',
+    name: 'Guy Hawkins',
+    instruments: 'Guitarist',
+    image: 'https://images.unsplash.com/photo-1507838153414-b4b713384a76',
+    rating: 4.8,
+    previousShows: 49,
+    isFavorite: false,
+  },
+  {
+    id: '3',
+    name: 'Jacob Jones',
+    instruments: 'Guitarist, Bass',
+    image: 'https://images.unsplash.com/photo-1517230878791-4d28214057c2',
+    rating: 4.8,
+    previousShows: 49,
+    isFavorite: false,
+  },
+  {
+    id: '4',
+    name: 'Leslie Alexander',
+    instruments: 'Guitarist, Drummer',
+    image: 'https://images.unsplash.com/photo-1510915361894-db8b60106cb1',
+    rating: 4.8,
+    previousShows: 49,
+    isFavorite: false,
+  },
+];

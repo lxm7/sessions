@@ -1,58 +1,16 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { View, Text, Image, FlatList, Pressable, ScrollView, StatusBar } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Feather, Ionicons } from '@expo/vector-icons';
 
-const specialists = [
-  {
-    id: '1',
-    name: 'Jane Cooper',
-    specialty: 'Guitarist',
-    image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4',
-    rating: 4.8,
-    reviews: 49,
-    isProfessional: true,
-    isFavorite: true,
-  },
-  {
-    id: '2',
-    name: 'Guy Hawkins',
-    specialty: 'Guitarist',
-    image: 'https://images.unsplash.com/photo-1507838153414-b4b713384a76',
-    rating: 4.8,
-    reviews: 49,
-    isProfessional: true,
-    isFavorite: false,
-  },
-  {
-    id: '3',
-    name: 'Jacob Jones',
-    specialty: 'Guitarist',
-    image: 'https://images.unsplash.com/photo-1517230878791-4d28214057c2',
-    rating: 4.8,
-    reviews: 49,
-    isProfessional: true,
-    isFavorite: false,
-  },
-  {
-    id: '4',
-    name: 'Leslie Alexander',
-    specialty: 'Guitarist',
-    image: 'https://images.unsplash.com/photo-1510915361894-db8b60106cb1',
-    rating: 4.8,
-    reviews: 49,
-    isProfessional: true,
-    isFavorite: false,
-  },
-];
+import { musicians } from '~/data/musicians';
+import { instruments } from '~/data/instruments';
 
-const categories = ['All', 'Guitarist', 'Cardiologist', 'Neurologist', 'Ophthalmologist'];
-
-export default function SpecialistsScreen() {
+export default function MusiciansScreen() {
   const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState('Guitarist');
   const [favorites, setFavorites] = useState(
-    specialists.filter((s) => s.isFavorite).map((s) => s.id)
+    musicians.filter((s) => s.isFavorite).map((s) => s.id)
   );
 
   const toggleFavorite = (id: string) => {
@@ -63,7 +21,7 @@ export default function SpecialistsScreen() {
     }
   };
 
-  const renderSpecialist = ({ item }: { item: (typeof specialists)[0] }) => (
+  const renderSpecialist = ({ item }: { item: (typeof musicians)[0] }) => (
     <Pressable
       className="mb-4 rounded-xl border border-gray-100 bg-white p-4 shadow-sm"
       onPress={() => router.push(`/specialist/${item.id}`)}>
@@ -73,7 +31,7 @@ export default function SpecialistsScreen() {
         <View className="ml-3 flex-1">
           <View className="flex-row justify-between">
             <View className="flex-row items-center rounded-lg bg-blue-100 px-2 py-1">
-              <Ionicons name="checkmark-circle" size={16} color="#007AFF" />
+              <Ionicons name="checkmark-circle" size={16} color="#a855f7" />
               <Text className="ml-1 text-xs text-blue-500">Professional musician</Text>
             </View>
 
@@ -87,7 +45,7 @@ export default function SpecialistsScreen() {
           </View>
 
           <Text className="mt-1 text-lg font-bold text-gray-800">{item.name}</Text>
-          <Text className="text-gray-500">{item.specialty}</Text>
+          <Text className="text-gray-500">{item.instruments}</Text>
 
           <View className="mt-1 flex-row items-center">
             <View className="flex-row items-center">
@@ -96,7 +54,7 @@ export default function SpecialistsScreen() {
               ))}
               <Text className="ml-1 font-medium">{item.rating}</Text>
             </View>
-            <Text className="ml-2 text-gray-400">| {item.reviews} Reviews</Text>
+            <Text className="ml-2 text-gray-400">| {item.previousShows} previousShows</Text>
           </View>
         </View>
       </View>
@@ -137,11 +95,13 @@ export default function SpecialistsScreen() {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ paddingHorizontal: 12 }}
         className="bg-white py-3">
-        {categories.map((category) => (
+        {instruments.map((category) => (
           <Pressable
             key={category}
             className={`mr-2 rounded-full px-5 py-2 ${
-              selectedCategory === category ? 'bg-blue-500' : 'bg-gray-100'
+              selectedCategory === category
+                ? 'bg-gradient-to-r from-purple-500 to-purple-900'
+                : 'bg-gray-100'
             }`}
             onPress={() => setSelectedCategory(category)}>
             <Text
@@ -154,9 +114,9 @@ export default function SpecialistsScreen() {
         ))}
       </ScrollView>
 
-      {/* Specialists list */}
+      {/* musicians list */}
       <FlatList
-        data={specialists}
+        data={musicians}
         renderItem={renderSpecialist}
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ padding: 16 }}

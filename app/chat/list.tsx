@@ -99,7 +99,7 @@ const ChatListScreen = () => {
     <View className="flex-1 bg-gray-100">
       <StatusBar barStyle="light-content" />
       {/* Header */}
-      <View className="bg-blue-500 p-4">
+      <View className="bg-gradient-to-r from-purple-500 to-purple-900 p-4">
         <View className="mb-4 flex-row items-center">
           <Pressable className="mr-4 p-1">
             <Ionicons name="arrow-back" size={24} color="white" />

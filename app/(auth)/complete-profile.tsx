@@ -149,7 +149,7 @@ export default function CompleteProfileScreen() {
           </View>
           <Pressable
             onPress={handlePickImage}
-            className="absolute bottom-0 right-0 h-8 w-8 items-center justify-center rounded-full bg-blue-500">
+            className="absolute bottom-0 right-0 h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r from-purple-500 to-purple-900">
             <Feather name="edit-2" size={16} color="white" />
           </Pressable>
         </View>
@@ -232,7 +232,7 @@ export default function CompleteProfileScreen() {
       {/* Complete profile button */}
       <Pressable
         onPress={handleCompleteProfile}
-        className="mt-8 h-14 items-center justify-center rounded-full bg-blue-500">
+        className="mt-8 h-14 items-center justify-center rounded-full bg-gradient-to-r from-purple-500 to-purple-900">
         <Text className="text-lg font-medium text-white">Complete Profile</Text>
       </Pressable>
     </View>

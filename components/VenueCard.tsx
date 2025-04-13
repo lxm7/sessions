@@ -28,13 +28,13 @@ const VenueCard = ({ venue }: { venue: venue }) => (
       <Text className="mb-1 text-lg font-bold">{venue.name}</Text>
       <Text className="mb-2 text-sm text-gray-500">{venue.specialties.join(', ')}</Text>
       <View className="mb-1 flex-row items-center">
-        <Ionicons name="location-sharp" size={16} color="#3b82f6" />
+        <Ionicons name="location-sharp" size={16} color="#a855f7" />
         <Text className="ml-1.5 flex-shrink text-sm text-gray-600" numberOfLines={1}>
           {venue.address}
         </Text>
       </View>
       <View className="flex-row items-center">
-        <MaterialCommunityIcons name="clock-time-four-outline" size={16} color="#3b82f6" />
+        <MaterialCommunityIcons name="clock-time-four-outline" size={16} color="#a855f7" />
         <Text className="ml-1.5 text-sm text-gray-600">
           {venue.time} • {venue.distance}
         </Text>

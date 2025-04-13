@@ -42,7 +42,7 @@ const ChatScreen = () => {
     <View className="flex-1 bg-gray-100">
       <StatusBar barStyle="light-content" />
       {/* Header */}
-      <View className="flex-row items-center justify-between bg-blue-500 p-4">
+      <View className="flex-row items-center justify-between bg-gradient-to-r from-purple-500 to-purple-900 p-4">
         <Pressable>
           <Ionicons name="arrow-back" size={24} color="white" />
         </Pressable>
@@ -78,7 +78,9 @@ const ChatScreen = () => {
               )}
               <View
                 className={`rounded-lg p-3 ${
-                  msg.isMe ? 'rounded-br-none bg-blue-500' : 'rounded-bl-none bg-white shadow-sm' // Added subtle shadow for received messages
+                  msg.isMe
+                    ? 'rounded-br-none bg-gradient-to-r from-purple-500 to-purple-900'
+                    : 'rounded-bl-none bg-white shadow-sm' // Added subtle shadow for received messages
                 }`}>
                 {msg.text && (
                   <Text className={`${msg.isMe ? 'text-white' : 'text-black'}`}>{msg.text}</Text>
@@ -136,7 +138,7 @@ const ChatScreen = () => {
           placeholder="Type a message here..."
           placeholderTextColor="#9ca3af" // Explicit placeholder color
         />
-        <Pressable className="h-10 w-10 items-center justify-center rounded-full bg-blue-500 p-2">
+        <Pressable className="h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-purple-500 to-purple-900 p-2">
           <Ionicons name="mic" size={20} color="white" />
         </Pressable>
       </View>

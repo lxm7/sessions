@@ -91,7 +91,7 @@ export default function LocationScreen() {
       <Pressable
         className="flex-row items-center border-b border-gray-100 px-4 py-4"
         onPress={() => console.log('Use current location')}>
-        <View className="mr-3 h-10 w-10 items-center justify-center rounded-full bg-blue-500">
+        <View className="mr-3 h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-purple-500 to-purple-900">
           <Ionicons name="navigate" size={20} color="white" />
         </View>
         <Text className="text-base font-medium">Use my current location</Text>
@@ -109,7 +109,7 @@ export default function LocationScreen() {
               className="flex-row items-center border-b border-gray-100 px-4 py-3"
               onPress={() => handleSelectLocation(item)}>
               <View className="mr-3 h-9 w-9 items-center justify-center rounded-full bg-blue-100">
-                <Ionicons name="location" size={18} color="#007AFF" />
+                <Ionicons name="location" size={18} color="#a855f7" />
               </View>
               <View>
                 <Text className="text-base font-medium text-gray-800">{item.name}</Text>

@@ -177,7 +177,7 @@ export default function VerifyCodeScreen() {
         onPress={handleVerify}
         disabled={isVerifying}
         className={`mt-8 h-14 items-center justify-center rounded-full ${
-          isVerifying ? 'bg-blue-400' : 'bg-blue-500'
+          isVerifying ? 'bg-blue-400' : 'bg-gradient-to-r from-purple-500 to-purple-900'
         }`}>
         <Text className="text-lg font-medium text-white">
           {isVerifying ? 'Verifying...' : 'Verify'}

@@ -125,7 +125,7 @@ export default function SignInScreen() {
         {/* Sign in button */}
         <Pressable
           className={`mt-2 h-14 items-center justify-center rounded-full ${
-            isSubmitting ? 'bg-blue-400' : 'bg-blue-500'
+            isSubmitting ? 'bg-blue-400' : 'bg-gradient-to-r from-purple-500 to-purple-900'
           }`}
           onPress={handleSubmit(onSubmit)}
           disabled={isSubmitting}>

@@ -1,16 +1,8 @@
-import React from 'react';
 import { View, Text, Image, ScrollView, Pressable, StatusBar } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Feather, Ionicons } from '@expo/vector-icons';
 import VenueCard from '~/components/VenueCard';
 import { venues } from '~/data/venue';
-
-const specialties = [
-  { id: '1', name: 'Guitarist', icon: '🦷' },
-  { id: '2', name: 'Cardiologist', icon: '❤️' },
-  { id: '3', name: 'Orthopaedic', icon: '🦴' },
-  { id: '4', name: 'Neurologist', icon: '🧠' },
-];
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -24,7 +16,7 @@ export default function HomeScreen() {
         <View className="flex-row items-center justify-between">
           <View className="flex-row items-center">
             <Pressable onPress={() => router.push('/location')} className="flex-row items-center">
-              <Ionicons name="location" size={20} color="#007AFF" />
+              <Ionicons name="location" size={20} color="#a855f7" />
               <Text className="ml-1 font-medium text-gray-700">New York, USA</Text>
               <Ionicons name="chevron-down" size={16} color="#666" />
             </Pressable>
@@ -48,7 +40,7 @@ export default function HomeScreen() {
           </Pressable>
 
           <Pressable
-            className="ml-3 h-12 w-12 items-center justify-center rounded-lg bg-blue-500"
+            className="ml-3 h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-r from-purple-500 to-purple-900"
             onPress={() => console.log('Filter')}>
             <Feather name="sliders" size={20} color="white" />
           </Pressable>
@@ -60,7 +52,7 @@ export default function HomeScreen() {
         <View className="mb-3 flex-row items-center justify-between">
           <View className="flex-row items-center">
             <Text className="text-xl font-bold text-gray-800">Upcoming Schedule</Text>
-            <View className="ml-2 h-6 w-6 items-center justify-center rounded-full bg-blue-500">
+            <View className="ml-2 h-6 w-6 items-center justify-center rounded-full bg-gradient-to-r from-purple-500 to-purple-900">
               <Text className="text-xs font-bold text-white">2</Text>
             </View>
           </View>
@@ -71,7 +63,7 @@ export default function HomeScreen() {
         </View>
 
         <Pressable
-          className="rounded-xl bg-blue-500 p-4"
+          className="rounded-xl bg-gradient-to-r from-purple-500 to-purple-900 p-4"
           onPress={() => router.push('/appointment/1')}>
           <View className="flex-row items-center">
             <Image
@@ -104,7 +96,7 @@ export default function HomeScreen() {
         </Pressable>
 
         <Pressable
-          className="mt-4 rounded-xl bg-blue-500 p-4"
+          className="mt-4 rounded-xl bg-gradient-to-r from-purple-500 to-purple-900 p-4"
           onPress={() => router.push('/appointment/1')}>
           <View className="flex-row items-center">
             <Image
