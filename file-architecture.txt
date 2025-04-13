@@ -1,0 +1,117 @@
+app/
+├── _layout.tsx                  # Root layout (providers, auth check, offline status bar)
+├── index.tsx                    # Entry point with redirection logic
+│
+├── (public)/                    # Public, unauthenticated routes group
+│   ├── _layout.tsx              # Public layout (no drawer/tabs)
+│   ├── intro.tsx                # App intro/landing page
+│   ├── welcome/                 # Welcome flow (multi-page)
+│   │   ├── _layout.tsx          # Welcome pages layout
+│   │   ├── index.tsx            # Welcome screen 1
+│   │   ├── features.tsx         # Key features highlight
+│   │   └── final.tsx            # Final welcome screen leading to sign up
+│   ├── discover-preview.tsx     # Taster page - limited discover content
+│   ├── events-preview.tsx       # Taster page - upcoming featured events
+│   │
+│   └── (auth)/                  # Auth-related screens
+│       ├── _layout.tsx          # Auth screens layout
+│       ├── login.tsx            # Login screen
+│       ├── signup.tsx           # Registration screen
+│       ├── forgot-password.tsx  # Password recovery
+│       └── verification.tsx     # Email/phone verification
+│
+├── (app)/                       # Protected app routes (requires authentication)
+│   ├── _layout.tsx              # Protected routes layout + offline indicator
+│   │
+│   ├── onboarding/              # Post-signup onboarding flow
+│   │   ├── _layout.tsx          # Onboarding layout
+│   │   ├── index.tsx            # User type selection (musician, venue, fan)
+│   │   ├── profile-setup.tsx    # Basic profile setup
+│   │   ├── preferences.tsx      # Music/event preferences
+│   │   └── connections.tsx      # Find initial connections
+│   │
+│   ├── (drawer)/                # Main drawer navigation
+│       ├── _layout.tsx          # Drawer configuration
+│       │
+│       ├── (tabs)/              # Main app tabs
+│       │   ├── _layout.tsx      # Tab bar configuration
+│       │   │
+│       │   ├── discover/        # Discover section
+│       │   │   ├── _layout.tsx  # Discover segments layout
+│       │   │   ├── index.tsx    # Musicians tab (default)
+│       │   │   ├── venues.tsx   # Venues tab
+│       │   │   ├── trending.tsx # Trending tab
+│       │   │   ├── [musician].tsx # Dynamic musician details
+│       │   │   └── venue/[id].tsx # Dynamic venue details
+│       │   │
+│       │   ├── events/
+│       │   │   ├── _layout.tsx  # Events segments layout
+│       │   │   ├── index.tsx    # Upcoming events
+│       │   │   ├── for-you.tsx  # Personalized recommendations
+│       │   │   ├── my-tickets.tsx # User's tickets
+│       │   │   └── [id].tsx     # Event details + ticket purchase
+│       │   │
+│       │   ├── messages/
+│       │   │   ├── _layout.tsx  # Messages layout with sync indicator
+│       │   │   ├── index.tsx    # Conversations list
+│       │   │   └── [id].tsx     # Chat detail with offline support
+│       │   │
+│       │   └── profile/
+│       │       ├── _layout.tsx  # Profile layout
+│       │       ├── index.tsx    # User profile
+│       │       ├── edit.tsx     # Edit profile modal
+│       │       ├── settings/    # Settings screens
+│       │       │   ├── _layout.tsx # Settings layout
+│       │       │   ├── index.tsx   # Main settings
+│       │       │   ├── account.tsx # Account settings
+│       │       │   ├── notifications.tsx # Notification preferences
+│       │       │   ├── privacy.tsx # Privacy settings
+│       │       │   └── offline.tsx # Offline settings & storage
+│       │       ├── gigs.tsx     # Gigs management
+│       │       ├── analytics.tsx # Analytics dashboard
+│       │       └── connections.tsx # Network/connections
+│       │
+│       ├── calendar/            # Calendar screens
+│       │   ├── _layout.tsx      # Calendar layout 
+│       │   ├── index.tsx        # Month view
+│       │   ├── day/[date].tsx   # Day detail view
+│       │   └── sync.tsx         # Calendar sync options
+│       │
+│       ├── saved/               # Saved items (local-first)
+│       │   ├── _layout.tsx      # Saved items layout
+│       │   ├── index.tsx        # All saved items
+│       │   ├── musicians.tsx    # Saved musicians
+│       │   ├── venues.tsx       # Saved venues
+│       │   └── events.tsx       # Saved events
+│       │
+│       ├── network/             # Professional network
+│       │   ├── _layout.tsx      # Network layout
+│       │   ├── index.tsx        # Network home
+│       │   ├── recommendations.tsx # Suggested connections
+│       │   └── [id].tsx         # Connection profile
+│       │
+│       ├── promo-tools.tsx      # Promotional tools
+│       ├── help.tsx             # Help & support
+│       │
+│       └── studio/              # Content creation tools (if user is musician)
+│           ├── _layout.tsx      # Studio layout
+│           ├── index.tsx        # Studio home
+│           ├── portfolio.tsx    # Portfolio management
+│           ├── media.tsx        # Music/photo uploads
+│           └── press-kit.tsx    # Press kit builder
+│
+├── api/                         # API route handlers (for web)
+│
+└── components/                  # Shared UI components
+    ├── ui/                      # Basic UI components
+    ├── sync/                    # Sync-related components
+    │   ├── SyncIndicator.tsx    # Shows sync status
+    │   ├── OfflineBanner.tsx    # Indicates offline mode
+    │   └── SyncControls.tsx     # Manual sync controls
+    ├── auth/                    # Auth-related components
+    │   ├── ProtectedRoute.tsx   # Route protection wrapper
+    │   └── LoginPrompt.tsx      # Login suggestion popup
+    └── data/                    # Data management components
+        ├── LocalDataProvider.tsx # Local data context provider
+        ├── SyncProvider.tsx     # Sync state provider
+        └── OfflineIndicator.tsx # Network status indicator

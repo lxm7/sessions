@@ -8,6 +8,22 @@
       "~/*": ["*"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts", "nativewind-env.d.ts"],
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts",
+    "nativewind-env.d.ts",
+    "lib/database.tsx",
+    "models/Venue.js",
+    "models/User.js",
+    "models/Track.js",
+    "models/PlaylistTrack.js",
+    "models/Playlist.js",
+    "models/migrations.js",
+    "models/Favourite.js",
+    "models/Event.js",
+    "models/Album.js"
+  ],
   "exclude": ["node_modules", "babel.config.js", "metro.config.js", "jest.config.js"]
 }
