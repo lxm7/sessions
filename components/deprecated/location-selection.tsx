@@ -54,7 +54,7 @@ export default function LocationScreen() {
       <StatusBar barStyle="dark-content" />
 
       {/* Header */}
-      <View className="bg-white px-4 pb-4 pt-12">
+      <View className="bg-white px-4 pb-4 pt-4">
         <View className="flex-row items-center">
           <Pressable
             className="h-10 w-10 items-center justify-center rounded-full bg-gray-100"

@@ -11,7 +11,7 @@ function CustomHeader({ navigation }: any) {
   const currentRoute = pathname.split('/').pop() || '';
 
   return (
-    <View className="border-b border-gray-200 bg-white px-4 pb-2 pt-12">
+    <View className="border-b border-gray-200 bg-white px-4 pb-2 pt-4">
       <View className="flex-row items-center justify-between">
         <TouchableOpacity onPress={() => navigation.openDrawer()} className="-ml-2 p-2">
           <Ionicons name="menu-outline" size={24} color="#333" />
@@ -25,7 +25,7 @@ function CustomHeader({ navigation }: any) {
       </View>
 
       {/* Segmented Control */}
-      <View className="mt-4 flex-row rounded-lg bg-gray-100 p-1">
+      {/* <View className="mt-4 flex-row rounded-lg bg-gray-100 p-1">
         <TouchableOpacity
           onPress={() => navigation.navigate('/')}
           className={`flex-1 rounded-md px-4 py-2 ${
@@ -66,7 +66,7 @@ function CustomHeader({ navigation }: any) {
             Trending
           </Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </View>
   );
 }

@@ -17,7 +17,7 @@ export default function musicianDetailsScreen() {
       <StatusBar barStyle="dark-content" />
 
       {/* Header */}
-      <View className="border-b border-gray-100 px-4 pb-4 pt-12">
+      <View className="border-b border-gray-100 px-4 pb-4 pt-4">
         <View className="flex-row items-center justify-between">
           <Pressable
             className="h-10 w-10 items-center justify-center rounded-full bg-gray-100"

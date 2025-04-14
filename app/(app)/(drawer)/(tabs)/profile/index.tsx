@@ -7,7 +7,7 @@ export default function ProfileScreen() {
 
   return (
     <View className="flex-1 bg-gray-50">
-      <View className="flex-row items-center justify-between border-b border-gray-200 px-4 pb-2 pt-12">
+      <View className="flex-row items-center justify-between border-b border-gray-200 px-4 pb-2 pt-4">
         <TouchableOpacity onPress={() => router.navigate('../../../drawer/')}>
           <Ionicons name="menu-outline" size={24} color="#333" />
         </TouchableOpacity>
