@@ -10,14 +10,8 @@ import { AppState, AppStateStatus } from 'react-native';
 import NetInfo, { NetInfoState } from '@react-native-community/netinfo';
 import { useDatabase } from './database';
 import { useAuth } from './auth';
-import {
-  syncDatabase,
-  SyncState,
-  SyncOptions,
-  SyncResult,
-  isOnline,
-  getLastSyncTimestamp,
-} from '../lib/sync';
+import { syncDatabase, SyncState, SyncOptions, SyncResult, isOnline } from '~/lib/sync';
+import { getLastSyncTimestamp } from '~/lib/storage';
 
 // Default sync interval in ms (15 minutes)
 const DEFAULT_SYNC_INTERVAL = 15 * 60 * 1000;

@@ -23,7 +23,7 @@ export default function ProfileScreen() {
         {/* Profile Header */}
         <View className="items-center border-b border-gray-200 bg-white p-4">
           <Image
-            source={{ uri: 'https://via.placeholder.com/150' }}
+            source={{ uri: 'https://randomuser.me/api/portraits/women/32.jpg' }}
             className="mb-3 h-24 w-24 rounded-full"
           />
           <Text className="text-2xl font-bold">Jane Musician</Text>

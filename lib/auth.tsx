@@ -1,24 +1,29 @@
+// providers/auth.tsx
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import * as AuthSession from 'expo-auth-session';
 import * as WebBrowser from 'expo-web-browser';
-import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
 import Constants from 'expo-constants';
 import { router } from 'expo-router';
-import { User } from '../models/User';
-import { useDatabase } from './database';
 import NetInfo from '@react-native-community/netinfo';
 
-// Configure native web browser redirect
-WebBrowser.maybeCompleteAuthSession();
+import {
+  storage,
+  AUTH_KEY_PREFIX,
+  ACCESS_TOKEN_KEY,
+  REFRESH_TOKEN_KEY,
+  USER_INFO_KEY,
+  AUTH_STATE_KEY,
+  LAST_LOGIN_KEY,
+  getAuthToken,
+} from '../lib/storage';
+import { useDatabase } from './database';
+import { isOnline } from '../lib/sync';
 
-// Constants for auth
-const AUTH_KEY_PREFIX = 'musichub_auth_';
-const ACCESS_TOKEN_KEY = `${AUTH_KEY_PREFIX}access_token`;
-const REFRESH_TOKEN_KEY = `${AUTH_KEY_PREFIX}refresh_token`;
-const USER_INFO_KEY = `${AUTH_KEY_PREFIX}user_info`;
-const AUTH_STATE_KEY = `${AUTH_KEY_PREFIX}auth_state`;
-const LAST_LOGIN_KEY = `${AUTH_KEY_PREFIX}last_login`;
+// Configure native web browser redirect
+if (Platform.OS !== 'web') {
+  WebBrowser.maybeCompleteAuthSession();
+}
 
 // API config
 const API_URL = Constants.expoConfig?.extra?.apiUrl || 'https://api.musichub.app';
@@ -79,47 +84,45 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const loadAuthState = async () => {
       try {
-        // Try to load auth state from secure storage
-        const storedToken = await SecureStore.getItemAsync(ACCESS_TOKEN_KEY);
-        const storedUser = await SecureStore.getItemAsync(USER_INFO_KEY);
-        const storedRefreshToken = await SecureStore.getItemAsync(REFRESH_TOKEN_KEY);
-        const lastLoginTimeStr = await SecureStore.getItemAsync(LAST_LOGIN_KEY);
+        // Try to load auth state from storage
+        const storedToken = await storage.getString(ACCESS_TOKEN_KEY);
+        const storedUser = await storage.getItem<AuthUser>(USER_INFO_KEY);
+        const storedRefreshToken = await storage.getString(REFRESH_TOKEN_KEY);
+        const lastLoginTimeStr = await storage.getString(LAST_LOGIN_KEY);
 
         // Check for stored credentials
         if (storedToken && storedUser) {
-          const userInfo = JSON.parse(storedUser) as AuthUser;
-
           // Check our network status
-          const networkState = await NetInfo.fetch();
+          const online = await isOnline();
 
-          if (networkState.isConnected) {
+          if (online) {
             // We're online - verify token with server
             try {
               const verifyResult = await validateToken(storedToken);
               if (verifyResult.valid) {
                 // Token is valid
                 setIsSignedIn(true);
-                setUser(userInfo);
+                setUser(storedUser);
                 setAccessToken(storedToken);
                 setRefreshToken(storedRefreshToken);
                 setIsOfflineAuthenticated(false);
                 setLastSyncedAuthAt(new Date());
                 // Store last successful authentication time
-                await SecureStore.setItemAsync(LAST_LOGIN_KEY, new Date().toISOString());
+                await storage.setItem(LAST_LOGIN_KEY, new Date().toISOString());
               } else if (storedRefreshToken) {
                 // Try to refresh the token
                 const newTokens = await refreshAccessToken(storedRefreshToken);
                 if (newTokens) {
                   setIsSignedIn(true);
-                  setUser(userInfo);
+                  setUser(storedUser);
                   setAccessToken(newTokens.accessToken);
                   setRefreshToken(newTokens.refreshToken);
                   setIsOfflineAuthenticated(false);
                   setLastSyncedAuthAt(new Date());
                   // Update stored tokens
-                  await SecureStore.setItemAsync(ACCESS_TOKEN_KEY, newTokens.accessToken);
-                  await SecureStore.setItemAsync(REFRESH_TOKEN_KEY, newTokens.refreshToken);
-                  await SecureStore.setItemAsync(LAST_LOGIN_KEY, new Date().toISOString());
+                  await storage.setItem(ACCESS_TOKEN_KEY, newTokens.accessToken);
+                  await storage.setItem(REFRESH_TOKEN_KEY, newTokens.refreshToken);
+                  await storage.setItem(LAST_LOGIN_KEY, new Date().toISOString());
                 } else {
                   // Refresh failed, user needs to login again
                   await clearAuthData();
@@ -141,7 +144,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
                 if (daysSinceLastLogin <= maxOfflineAuthDays) {
                   setIsSignedIn(true);
-                  setUser(userInfo);
+                  setUser(storedUser);
                   setAccessToken(storedToken);
                   setRefreshToken(storedRefreshToken);
                   setIsOfflineAuthenticated(true);
@@ -166,7 +169,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
               if (daysSinceLastLogin <= maxOfflineAuthDays) {
                 setIsSignedIn(true);
-                setUser(userInfo);
+                setUser(storedUser);
                 setAccessToken(storedToken);
                 setRefreshToken(storedRefreshToken);
                 setIsOfflineAuthenticated(true);
@@ -198,10 +201,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Clear all auth data
   const clearAuthData = async () => {
     try {
-      await SecureStore.deleteItemAsync(ACCESS_TOKEN_KEY);
-      await SecureStore.deleteItemAsync(REFRESH_TOKEN_KEY);
-      await SecureStore.deleteItemAsync(USER_INFO_KEY);
-      await SecureStore.deleteItemAsync(AUTH_STATE_KEY);
+      await storage.removeItem(ACCESS_TOKEN_KEY);
+      await storage.removeItem(REFRESH_TOKEN_KEY);
+      await storage.removeItem(USER_INFO_KEY);
+      await storage.removeItem(AUTH_STATE_KEY);
       // Don't clear LAST_LOGIN_KEY to remember last successful login
 
       setIsSignedIn(false);
@@ -223,7 +226,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // Try to get from storage
     try {
-      const storedToken = await SecureStore.getItemAsync(ACCESS_TOKEN_KEY);
+      const storedToken = await storage.getString(ACCESS_TOKEN_KEY);
       if (storedToken) {
         setAccessToken(storedToken);
         return storedToken;
@@ -283,25 +286,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Sign in with email and password
   const signIn = async (email: string, password: string): Promise<void> => {
     // First check if we're online
-    const networkState = await NetInfo.fetch();
+    const online = await isOnline();
 
-    if (!networkState.isConnected) {
+    if (!online) {
       // We're offline - try to authenticate with stored credentials
       try {
-        const storedUser = await SecureStore.getItemAsync(USER_INFO_KEY);
+        const storedUser = await storage.getItem<AuthUser>(USER_INFO_KEY);
         if (storedUser) {
-          const userInfo = JSON.parse(storedUser) as AuthUser;
-
           // If the email matches, we'll perform offline authentication
           // In a real app, you'd want to verify the password hash locally
           // This is a simplified example
-          if (userInfo.email === email) {
+          if (storedUser.email === email) {
             // Here you would verify the password against a locally stored hash
             // For demo purposes, we're skipping actual password verification
 
-            const storedToken = await SecureStore.getItemAsync(ACCESS_TOKEN_KEY);
-            const storedRefreshToken = await SecureStore.getItemAsync(REFRESH_TOKEN_KEY);
-            const lastLoginTimeStr = await SecureStore.getItemAsync(LAST_LOGIN_KEY);
+            const storedToken = await storage.getString(ACCESS_TOKEN_KEY);
+            const storedRefreshToken = await storage.getString(REFRESH_TOKEN_KEY);
+            const lastLoginTimeStr = await storage.getString(LAST_LOGIN_KEY);
 
             if (storedToken && lastLoginTimeStr) {
               const lastLoginTime = new Date(lastLoginTimeStr);
@@ -313,7 +314,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
               if (daysSinceLastLogin <= maxOfflineAuthDays) {
                 setIsSignedIn(true);
-                setUser(userInfo);
+                setUser(storedUser);
                 setAccessToken(storedToken);
                 setRefreshToken(storedRefreshToken);
                 setIsOfflineAuthenticated(true);
@@ -348,10 +349,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const data = await response.json();
 
       // Save auth data
-      await SecureStore.setItemAsync(ACCESS_TOKEN_KEY, data.accessToken);
-      await SecureStore.setItemAsync(REFRESH_TOKEN_KEY, data.refreshToken);
-      await SecureStore.setItemAsync(USER_INFO_KEY, JSON.stringify(data.user));
-      await SecureStore.setItemAsync(LAST_LOGIN_KEY, new Date().toISOString());
+      await storage.setItem(ACCESS_TOKEN_KEY, data.accessToken);
+      await storage.setItem(REFRESH_TOKEN_KEY, data.refreshToken);
+      await storage.setItem(USER_INFO_KEY, data.user);
+      await storage.setItem(LAST_LOGIN_KEY, new Date().toISOString());
 
       // Update state
       setIsSignedIn(true);
@@ -369,8 +370,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Sign up with email and password
   const signUp = async (email: string, password: string, name: string): Promise<void> => {
     // Check if we're online
-    const networkState = await NetInfo.fetch();
-    if (!networkState.isConnected) {
+    const online = await isOnline();
+    if (!online) {
       throw new Error('Internet connection required for signup');
     }
 
@@ -391,10 +392,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const data = await response.json();
 
       // Save auth data
-      await SecureStore.setItemAsync(ACCESS_TOKEN_KEY, data.accessToken);
-      await SecureStore.setItemAsync(REFRESH_TOKEN_KEY, data.refreshToken);
-      await SecureStore.setItemAsync(USER_INFO_KEY, JSON.stringify(data.user));
-      await SecureStore.setItemAsync(LAST_LOGIN_KEY, new Date().toISOString());
+      await storage.setItem(ACCESS_TOKEN_KEY, data.accessToken);
+      await storage.setItem(REFRESH_TOKEN_KEY, data.refreshToken);
+      await storage.setItem(USER_INFO_KEY, data.user);
+      await storage.setItem(LAST_LOGIN_KEY, new Date().toISOString());
 
       // Update state
       setIsSignedIn(true);
@@ -412,8 +413,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Sign in with Google
   const signInWithGoogle = async (): Promise<void> => {
     try {
-      const networkState = await NetInfo.fetch();
-      if (!networkState.isConnected) {
+      const online = await isOnline();
+      if (!online) {
         throw new Error('Internet connection required for Google Sign-In');
       }
 
@@ -465,10 +466,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const authData = await exchangeResponse.json();
 
         // Save auth data
-        await SecureStore.setItemAsync(ACCESS_TOKEN_KEY, authData.accessToken);
-        await SecureStore.setItemAsync(REFRESH_TOKEN_KEY, authData.refreshToken);
-        await SecureStore.setItemAsync(USER_INFO_KEY, JSON.stringify(authData.user));
-        await SecureStore.setItemAsync(LAST_LOGIN_KEY, new Date().toISOString());
+        await storage.setItem(ACCESS_TOKEN_KEY, authData.accessToken);
+        await storage.setItem(REFRESH_TOKEN_KEY, authData.refreshToken);
+        await storage.setItem(USER_INFO_KEY, authData.user);
+        await storage.setItem(LAST_LOGIN_KEY, new Date().toISOString());
 
         // Update state
         setIsSignedIn(true);
@@ -489,8 +490,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Sign in with Apple
   const signInWithApple = async (): Promise<void> => {
     try {
-      const networkState = await NetInfo.fetch();
-      if (!networkState.isConnected) {
+      const online = await isOnline();
+      if (!online) {
         throw new Error('Internet connection required for Apple Sign-In');
       }
 
@@ -503,10 +504,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Configure Apple provider
       const clientId = Constants.expoConfig?.extra?.appleClientId || '';
 
-      // Start the auth flow
-      const result = await AuthSession.startAsync({
-        authUrl: `https://appleid.apple.com/auth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code id_token&scope=name email&response_mode=form_post`,
+      // Configure discovery for Apple
+      const discovery = {
+        authorizationEndpoint: 'https://appleid.apple.com/auth/authorize',
+        tokenEndpoint: 'https://appleid.apple.com/auth/token',
+      };
+
+      // Create auth request
+      const authRequest = new AuthSession.AuthRequest({
+        clientId,
+        scopes: ['email', 'name'],
+        responseType: AuthSession.ResponseType.Code,
+        codeChallengeMethod: AuthSession.CodeChallengeMethod.S256,
+        redirectUri,
       });
+
+      // Start the auth flow with promptAsync instead of startAsync
+      const result = await authRequest.promptAsync(discovery);
 
       if (result.type === 'success') {
         // Exchange the authorization code for access token with your server
@@ -529,10 +543,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const authData = await exchangeResponse.json();
 
         // Save auth data
-        await SecureStore.setItemAsync(ACCESS_TOKEN_KEY, authData.accessToken);
-        await SecureStore.setItemAsync(REFRESH_TOKEN_KEY, authData.refreshToken);
-        await SecureStore.setItemAsync(USER_INFO_KEY, JSON.stringify(authData.user));
-        await SecureStore.setItemAsync(LAST_LOGIN_KEY, new Date().toISOString());
+        await storage.setItem(ACCESS_TOKEN_KEY, authData.accessToken);
+        await storage.setItem(REFRESH_TOKEN_KEY, authData.refreshToken);
+        await storage.setItem(USER_INFO_KEY, authData.user);
+        await storage.setItem(LAST_LOGIN_KEY, new Date().toISOString());
 
         // Update state
         setIsSignedIn(true);
@@ -555,9 +569,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       // Call server to invalidate token (if online)
       const token = await getAccessToken();
-      const networkState = await NetInfo.fetch();
+      const online = await isOnline();
 
-      if (networkState.isConnected && token) {
+      if (online && token) {
         try {
           await fetch(`${API_URL}/auth/logout`, {
             method: 'POST',
@@ -585,8 +599,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Reset password
   const resetPassword = async (email: string): Promise<void> => {
     try {
-      const networkState = await NetInfo.fetch();
-      if (!networkState.isConnected) {
+      const online = await isOnline();
+      if (!online) {
         throw new Error('Internet connection required to reset password');
       }
 
@@ -623,14 +637,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       };
 
       // Update stored user
-      await SecureStore.setItemAsync(USER_INFO_KEY, JSON.stringify(updatedUser));
+      await storage.setItem(USER_INFO_KEY, updatedUser);
 
       // Update state
       setUser(updatedUser);
 
       // Try to update server if online
-      const networkState = await NetInfo.fetch();
-      if (networkState.isConnected) {
+      const online = await isOnline();
+      if (online) {
         await fetch(`${API_URL}/users/complete-onboarding`, {
           method: 'POST',
           headers: {

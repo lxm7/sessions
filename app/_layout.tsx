@@ -58,16 +58,7 @@ function MainLayout() {
         screenOptions={{
           headerShown: false,
           animation: 'slide_from_right',
-        }}>
-        {/* Public routes (these are always accessible) */}
-        <Stack.Screen name="(public)" options={{ headerShown: false }} />
-
-        {/* Protected routes (only accessible when signed in) */}
-        {isSignedIn ? <Stack.Screen name="(app)" options={{ headerShown: false }} /> : null}
-
-        {/* Redirect to appropriate screen */}
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-      </Stack>
+        }}></Stack>
     </GestureHandlerRootView>
   );
 }
@@ -76,13 +67,10 @@ function MainLayout() {
 export default function RootLayout() {
   return (
     <DatabaseProvider>
-      {' '}
       {/* Initialize WatermelonDB or other local DB */}
       <AuthProvider>
-        {' '}
         {/* Authentication provider */}
         <SyncProvider>
-          {' '}
           {/* Sync service provider */}
           <MainLayout />
         </SyncProvider>

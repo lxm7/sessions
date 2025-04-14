@@ -4,6 +4,9 @@
     "slug": "sessions",
     "version": "1.0.0",
     "scheme": "sessions",
+    "extra": {
+      "appleClientId": "YOUR_APPLE_CLIENT_ID"
+    },
     "web": {
       "bundler": "metro",
       "output": "static",
@@ -40,7 +43,8 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "usesAppleSignIn": true
     },
     "android": {
       "adaptiveIcon": {

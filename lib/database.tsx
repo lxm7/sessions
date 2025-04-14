@@ -1,31 +1,13 @@
 import { Database } from '@nozbe/watermelondb';
 import { synchronize } from '@nozbe/watermelondb/sync';
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import NetInfo from '@react-native-community/netinfo';
-import SecureStore from 'expo-secure-store';
 
-import { createAdapter } from './adapter'; // <---- imports from adapter.web.ts on web
+import { createAdapter } from '~/lib/adapter';
 import { schema } from '~/models/schema';
-// import { migrations } from '~/models/migrations';
 import { modelClasses } from '~/models';
 import { API_URL } from '~/constants';
-
-// Create a database adapter
-// const adapter =
-//   Platform.OS === 'web'
-//     ? new LokiJSAdapter({
-//         schema,
-//         migrations,
-//         useWebWorker: true,
-//         useIncrementalIndexedDB: true,
-//       })
-//     : new SQLiteAdapter({
-//         schema,
-//         migrations,
-//         dbName: 'musichub',
-//         // Don't use JSI for Expo Go - set true only for dev builds or production
-//         jsi: process.env.APP_VARIANT !== 'development',
-//       });
+import { getAuthToken } from '~/lib/storage';
+import { isOnline } from '~/lib/sync';
 
 // Create the database
 export const database = new Database({
@@ -109,24 +91,21 @@ export function DatabaseProvider({ children }: { children: ReactNode }) {
   // Initial sync when the app starts
   useEffect(() => {
     const initialSync = async () => {
-      await syncDatabase();
+      const online = await isOnline();
+      if (online) {
+        await syncDatabase();
+      }
     };
 
-    // Check if we're online before syncing
-    NetInfo.fetch().then((state) => {
-      if (state.isConnected) {
-        initialSync();
-      }
-    });
+    initialSync();
 
     // Set up periodic syncing
     const syncIntervalId = setInterval(
-      () => {
-        NetInfo.fetch().then((state) => {
-          if (state.isConnected) {
-            syncDatabase();
-          }
-        });
+      async () => {
+        const online = await isOnline();
+        if (online) {
+          syncDatabase();
+        }
       },
       15 * 60 * 1000
     ); // Sync every 15 minutes
@@ -155,16 +134,4 @@ export function useDatabase() {
     throw new Error('useDatabase must be used within a DatabaseProvider');
   }
   return context;
-}
-
-// Helper to get auth token
-async function getAuthToken() {
-  // Implementation depends on your auth library
-  // This is just a placeholder
-  try {
-    // Get token from secure storage
-    return await SecureStore.getItemAsync('authToken');
-  } catch (error) {
-    return null;
-  }
 }

@@ -13,10 +13,10 @@ function CustomDrawerContent(props: any) {
       {/* Profile Section */}
       <View className="border-b border-gray-200 px-5 py-4">
         <Image
-          source={{ uri: 'https://via.placeholder.com/100' }}
+          source={{ uri: 'https://randomuser.me/api/portraits/women/32.jpg' }}
           className="mb-2 h-20 w-20 rounded-full"
         />
-        <Text className="text-lg font-bold">Jane Musician</Text>
+        <Text className="text-lg font-bold">Jane Jules</Text>
         <Text className="text-gray-500">Musician</Text>
       </View>
 

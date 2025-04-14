@@ -81,7 +81,7 @@ export default function CreateAccountScreen() {
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       // Navigate to complete profile on successful sign up
-      router.push('/complete-profile');
+      router.push('/(app)/onboarding/profile-setup');
     } catch (err) {
       setErrors({ email: 'An account with this email already exists.' });
     } finally {
@@ -260,7 +260,7 @@ export default function CreateAccountScreen() {
       {/* Sign in link */}
       <View className="mt-8 flex-row justify-center">
         <Text className="text-gray-600">Already have an account?</Text>
-        <Pressable onPress={() => router.push('/sign-in')}>
+        <Pressable onPress={() => router.push('/(app)/(drawer)/(tabs)/discover')}>
           <Text className="ml-1 text-blue-500">Sign In</Text>
         </Pressable>
       </View>

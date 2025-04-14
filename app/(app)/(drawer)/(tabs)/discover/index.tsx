@@ -1,15 +1,7 @@
 import { View, Text, FlatList, Image, TouchableOpacity } from 'react-native';
 import { Link } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-
-// Sample data
-const MUSICIANS = [
-  { id: '1', name: 'Sarah Johnson', genre: 'Jazz', image: 'https://via.placeholder.com/100' },
-  { id: '2', name: 'Mike Rivera', genre: 'Rock', image: 'https://via.placeholder.com/100' },
-  { id: '3', name: 'Jazz Quartet', genre: 'Jazz', image: 'https://via.placeholder.com/100' },
-  { id: '4', name: 'Ella Thompson', genre: 'Soul', image: 'https://via.placeholder.com/100' },
-  { id: '5', name: 'The Band Next Door', genre: 'Indie', image: 'https://via.placeholder.com/100' },
-];
+import { musicians } from '~/mockData/musicians';
 
 export default function MusiciansScreen() {
   const renderMusician = ({ item }: any) => (
@@ -27,7 +19,7 @@ export default function MusiciansScreen() {
   return (
     <View className="flex-1 bg-gray-50">
       <FlatList
-        data={MUSICIANS}
+        data={musicians}
         renderItem={renderMusician}
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ padding: 16 }}

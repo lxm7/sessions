@@ -2,41 +2,7 @@ import { View, Text, FlatList, Image, TouchableOpacity } from 'react-native';
 import { Link } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
-// Sample conversations data
-const CONVERSATIONS = [
-  {
-    id: '1',
-    name: 'Blue Note Club',
-    lastMessage: "We'd love to have you perform next Friday!",
-    time: '2:30 PM',
-    unread: true,
-    avatar: 'https://via.placeholder.com/50',
-  },
-  {
-    id: '2',
-    name: 'Sarah Johnson',
-    lastMessage: 'Looking forward to our collaboration',
-    time: '10:15 AM',
-    unread: false,
-    avatar: 'https://via.placeholder.com/50',
-  },
-  {
-    id: '3',
-    name: 'Jazz Festival Organizer',
-    lastMessage: 'Can you send your technical requirements?',
-    time: 'Yesterday',
-    unread: true,
-    avatar: 'https://via.placeholder.com/50',
-  },
-  {
-    id: '4',
-    name: 'Mike from The Band Next Door',
-    lastMessage: 'Great meeting you yesterday at the venue',
-    time: 'Yesterday',
-    unread: false,
-    avatar: 'https://via.placeholder.com/50',
-  },
-];
+import { conversations } from '~/mockData/conversations';
 
 export default function ConversationsScreen() {
   return (
@@ -52,7 +18,7 @@ export default function ConversationsScreen() {
       </View>
 
       <FlatList
-        data={CONVERSATIONS}
+        data={conversations}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <Link href={`/messages/${item.id}`} asChild>

@@ -1,9 +1,9 @@
 import { Database } from '@nozbe/watermelondb';
 import { synchronize } from '@nozbe/watermelondb/sync';
 import NetInfo from '@react-native-community/netinfo';
-import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
 import { API_URL } from '~/constants';
+import { getAuthToken, setLastSyncTimestamp } from './storage';
 
 // Types
 export type SyncResult = {
@@ -27,49 +27,15 @@ export type SyncOptions = {
   onProgress?: (progress: number) => void;
 };
 
-const LAST_SYNC_KEY = 'last_sync_timestamp';
-
 /**
  * Checks if the device is online
  */
 export const isOnline = async (): Promise<boolean> => {
-  const netInfo = await NetInfo.fetch();
-  return netInfo.isConnected === true;
-};
-
-/**
- * Gets the last sync timestamp from secure storage
- */
-export const getLastSyncTimestamp = async (): Promise<number | null> => {
-  try {
-    const timestamp = await SecureStore.getItemAsync(LAST_SYNC_KEY);
-    return timestamp ? parseInt(timestamp, 10) : null;
-  } catch (error) {
-    console.error('Error getting last sync timestamp:', error);
-    return null;
-  }
-};
-
-/**
- * Sets the last sync timestamp in secure storage
- */
-export const setLastSyncTimestamp = async (timestamp: number): Promise<void> => {
-  try {
-    await SecureStore.setItemAsync(LAST_SYNC_KEY, timestamp.toString());
-  } catch (error) {
-    console.error('Error setting last sync timestamp:', error);
-  }
-};
-
-/**
- * Gets an auth token for API calls
- */
-export const getAuthToken = async (): Promise<string | null> => {
-  try {
-    return await SecureStore.getItemAsync('authToken');
-  } catch (error) {
-    console.error('Error getting auth token:', error);
-    return null;
+  if (Platform.OS === 'web') {
+    return navigator.onLine;
+  } else {
+    const netInfo = await NetInfo.fetch();
+    return netInfo.isConnected === true;
   }
 };
 
@@ -82,7 +48,7 @@ export const syncDatabase = async (
 ): Promise<SyncResult> => {
   // Check if we're online
   const online = await isOnline();
-  if (!online) {
+  if (!online && !options.force) {
     return {
       success: false,
       error: new Error('Device is offline'),
@@ -103,7 +69,7 @@ export const syncDatabase = async (
 
   try {
     // Synchronize database with server
-    const syncResult = await synchronize({
+    const syncResult: any = await synchronize({
       database,
       pullChanges: async ({ lastPulledAt }) => {
         // Pull changes from server

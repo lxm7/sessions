@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 const TabBarIcon = ({ name, color }: { name: any; color: string }) => {
+  console.log({ name });
   return <Ionicons name={name} size={24} color={color} />;
 };
 
